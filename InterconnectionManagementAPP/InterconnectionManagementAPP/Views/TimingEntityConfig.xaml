@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InterconnectionManagementAPP.Views.TimingEntityConfig">
+    <ContentPage.Content>
+        <StackLayout>
+            <TableView Intent="Settings" HasUnevenRows="true">
+                <TableRoot>
+                    <TableSection>
+                        <EntryCell Label="任务名称  " Text="{Binding Timing.Name}" />
+                        <ViewCell>
+                            <Grid Margin="15,0">
+                                <Label Text="运行次数" VerticalOptions="CenterAndExpand"/>
+                                <Entry Text="{Binding Timing.RunCount}" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                        <SwitchCell Text="次数达到是否删除" On="{Binding Timing.IsDelete}"/>
+                        <SwitchCell Text="是否启用该任务" On="{Binding Timing.IsEnabled}"/>
+                        <ViewCell>
+                            <Grid Margin="15,0">
+                                <Label Text="联动设备" VerticalOptions="CenterAndExpand"/>
+                                <Picker ItemsSource="{Binding DeviceNameSource}" Grid.Column="1"
+                                        SelectedItem="{Binding DeviceName}" VerticalOptions="Center"/>
+                            </Grid>
+                        </ViewCell>
+                        <ViewCell>
+                            <Grid Margin="15,0">
+                                <Label Text="MAC" VerticalOptions="CenterAndExpand"/>
+                                <Label Text="{Binding Timing.Device.DeviceSocket.MACString}" VerticalOptions="Center" Grid.Column="1"/>
+                            </Grid>
+                        </ViewCell>
+                        <ViewCell>
+                            <Grid Margin="15,0">
+                                <Label Text="任务类型" VerticalOptions="CenterAndExpand"/>
+                                <Picker ItemsSource="{Binding TaskSource}" Grid.Column="1"
+                                        SelectedItem="{Binding Timing.TaskType}" VerticalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                        <ViewCell>
+                            <Grid Margin="15,0">
+                                <Label Text="时段类型" VerticalOptions="CenterAndExpand"/>
+                                <Picker ItemsSource="{Binding PeriodTypeSource}" Grid.Column="1"
+                                        SelectedItem="{Binding Timing.PeriodType}" VerticalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                        <ViewCell>
+                            <Grid Margin="15,0">
+                                <Label Text="指定时段" VerticalOptions="CenterAndExpand"/>
+                                <Entry Text="{Binding Timing.Weeks}" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                        <ViewCell>
+                            <Grid Margin="15,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="时间" VerticalOptions="CenterAndExpand"/>
+                                <Label Text="时" Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand"/>
+                                <Picker ItemsSource="{Binding HourSource}" Grid.Column="2" HorizontalTextAlignment="Center"
+                                        SelectedItem="{Binding Timing.Hour}" VerticalOptions="CenterAndExpand"/>
+                                <Label Grid.Column="3" Text="分" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand"/>
+                                <Picker ItemsSource="{Binding MinuteSource}" Grid.Column="4" HorizontalTextAlignment="Center"
+                                        SelectedItem="{Binding Timing.Minute}" VerticalOptions="CenterAndExpand"/>
+                                <Label Grid.Column="5" Text="秒" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand"/>
+                                <Picker ItemsSource="{Binding MinuteSource}" Grid.Column="6" HorizontalTextAlignment="Center"
+                                        SelectedItem="{Binding Timing.Seconds}" VerticalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                        <SwitchCell Text="触发状态" On="{Binding TPParameter.SwitchStatus}"/>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+            <StackLayout Orientation="Horizontal" Margin="0, 20" HorizontalOptions="CenterAndExpand">
+                <Button Text="保 存" Command="{Binding Save}"/>
+                <Button Text="删 除" Command="{Binding Delete}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cvt="clr-namespace:InterconnectionManagementAPP.Converters"
+             x:Class="InterconnectionManagementAPP.Views.MainPage"
+             Title="{Binding Title}" xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True">
+    <ContentPage.Resources>
+        <cvt:BoolToStatus x:Key="BTS"/>
+        <cvt:BoolToSwitch x:Key="BTSwitch"/>
+        <DataTemplate x:Key="SwitchTemplate">
+            <Grid Padding="5">
+                <Frame CornerRadius="5" Padding="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid VerticalOptions="Start" HorizontalOptions="Start" WidthRequest="30" HeightRequest="30" Margin="8">
+                            <Ellipse Fill="{Binding Path=IsOnline,Converter={StaticResource BTS}}" WidthRequest="30" HeightRequest="30"/>
+                            <Label Text="{Binding Index}" 
+                                       TextColor="White"
+                                       HorizontalOptions="Center" 
+                                       VerticalOptions="Center" />
+                        </Grid>
+                        <Label Text="{Binding Status,Converter={StaticResource BTSwitch}}" HorizontalTextAlignment="Center" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" Margin="5" VerticalOptions="End" WidthRequest="60" HeightRequest="70"/>
+                        <Label Grid.ColumnSpan="2"
+                                       Text="{Binding Name}"
+                                       VerticalOptions="Center" HorizontalOptions="Center"/>
+                        <Label Grid.Row="1"
+                                       Text="{Binding DeviceSocket.IP}" Margin="12,0,0,0"
+                                       VerticalOptions="Center" HorizontalOptions="Start" Grid.ColumnSpan="2"/>
+                        <Label Grid.Row="2"
+                                       Text="{Binding DeviceSocket.MACString}" Margin="12,0,0,0"
+                                       VerticalOptions="Center" HorizontalOptions="Start" Grid.ColumnSpan="2"/>
+                    </Grid>
+                </Frame>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate  x:Key="TemperatureTemplate">
+            <Grid Padding="5">
+                <Frame CornerRadius="5" Padding="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid VerticalOptions="Start" HorizontalOptions="Start" WidthRequest="30" HeightRequest="30" Margin="8">
+                            <Ellipse Fill="{Binding Path=IsOnline,Converter={StaticResource BTS}}" WidthRequest="30" HeightRequest="30"/>
+                            <Label Text="{Binding Index}" 
+                                       TextColor="White"
+                                       HorizontalOptions="Center" 
+                                       VerticalOptions="Center" />
+                        </Grid>
+                        <Label Text="{Binding Temperature,StringFormat='{0}℃'}"
+                               HorizontalTextAlignment="Center" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" Margin="5" VerticalOptions="End" WidthRequest="60" HeightRequest="70"/>
+                        <Label Grid.ColumnSpan="2"
+                                       Text="{Binding Name}"
+                                       VerticalOptions="Center" HorizontalOptions="Center"/>
+                        <Label Grid.Row="1"
+                                       Text="{Binding DeviceSocket.IP}" Margin="12,0,0,0"
+                                       VerticalOptions="Center" HorizontalOptions="Start" Grid.ColumnSpan="2"/>
+                        <Label Grid.Row="2"
+                                       Text="{Binding DeviceSocket.MACString}" Margin="12,0,0,0"
+                                       VerticalOptions="Center" HorizontalOptions="Start" Grid.ColumnSpan="2"/>
+                    </Grid>
+                </Frame>
+            </Grid>
+        </DataTemplate>
+        <cvt:DeviceTemplateSelector x:Key="deviceTemplateSelector" SwitchTemplate="{StaticResource SwitchTemplate}" TemperatureTemplate="{StaticResource TemperatureTemplate}"/>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    <StackLayout Margin="10">
+        <Label Text="设 备 列 表" HorizontalOptions="Center"/>
+        <CollectionView ItemsSource="{Binding DevicePool}" ItemsLayout="VerticalGrid, 2" ItemTemplate="{StaticResource deviceTemplateSelector}"
+                        SelectionMode="Single" SelectionChangedCommand="{Binding ItemSelection}" SelectionChangedCommandParameter="{Binding Source={RelativeSource Mode=Self}}">
+            <CollectionView.EmptyView>
+                <ContentView>
+                    <StackLayout HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                        <Label Text="当前没有设备，请搜索设备."
+                           Margin="10,25,10,10"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center" />
+                        <Label Text="确认设备是否正常通电连接wifi?"
+                           FontAttributes="Italic"
+                           FontSize="12"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center" />
+                    </StackLayout>
+                </ContentView>
+            </CollectionView.EmptyView>
+        </CollectionView>
+        <FlexLayout Direction="Row"
+            AlignItems="Center"
+            JustifyContent="SpaceEvenly">
+            <Button Text="搜索设备" Command="{Binding TestBoradcast}"/>
+            <Button Text="定时管理" Command="{Binding TimingCmd}"/>
+            <Button Text="设备联动" Command="{Binding TestBoradcast}"/>
+            <Button Text="系统设置" Command="{Binding TestBoradcast}" IsVisible="false"/>
+        </FlexLayout>
+    </StackLayout>
+</ContentPage>
